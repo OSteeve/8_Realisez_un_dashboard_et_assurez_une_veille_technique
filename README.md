@@ -1,14 +1,3 @@
-# 8_Realisez_un_dashboard_et_assurez_une_veille_technique
-amélioration du P7(Implémentez un modèle de scoring) amélioration du dashbord et P6 (classifiication des biens de conso) pour la partie veille technologique, utilisation d'un modèle moderne Transformer..  
-Maintenant nous souhaitons utiliser l’API pour réaliser un dashboard à destination de nos chargés de
-relation client. Ils le réclament depuis longtemps afin de pouvoir mieux expliquer à leurs clients les
-décisions, et parfois les revoir si nécessaire.
-
-
-Oui, pour un projet de soutenance/portfolio, tu peux faire beaucoup plus efficace. Voici une version plus concise et plus “pro” :
-
----
-
 # P8 – Dashboard interactif de scoring client & veille technique
 
 ## Contexte
@@ -94,9 +83,5 @@ streamlit run app/streamlit_app.py
 ## Réutilisation de projets précédents
 
 Ce projet réutilise certains notebooks, modèles et données issus des projets **P6** et **P7**.
-
 Ces fichiers ont été copiés localement afin de rendre le projet autonome. Les mises à jour de P6 ou P7 ne sont pas synchronisées automatiquement.
 
----
-
-Ça ressemble davantage à un README qu’un recruteur, un mentor ou un jury va réellement lire jusqu’au bout.
