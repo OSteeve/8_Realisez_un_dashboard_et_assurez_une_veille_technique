@@ -58,28 +58,6 @@ Objectif :
 * GitHub Actions
 * Amazon EC2
 
----
-
-## Installation
-
-```bash
-git clone <repo_url>
-cd P8
-pip install -r requirements.txt
-```
-
----
-
-## Lancement
-
-```bash
-streamlit run app/streamlit_app.py
-```
-
-⚠️ L’API du projet **P7** doit être accessible pour permettre les prédictions.
-
----
-
 ## Réutilisation de projets précédents
 
 Ce projet réutilise certains notebooks, modèles et données issus des projets **P6** et **P7**.
