@@ -12,7 +12,7 @@ app = FastAPI()
 # Base directory
 BASE_DIR = os.path.dirname(__file__)
 
-# Chargement du modèle et des ressources
+# Chargement du modèle et des données utiles
 pipe_path = os.path.join(BASE_DIR, "pipe_lgbm.joblib")
 pipe = joblib.load(pipe_path)
 
@@ -22,11 +22,14 @@ threshold = joblib.load(threshold_path)
 data_path = os.path.join(BASE_DIR, "app_data.joblib")
 data = joblib.load(data_path)
 
+global_importance_path = os.path.join(BASE_DIR, "global_importance.joblib")
+global_importance_data = joblib.load(global_importance_path)
+
 # Extraction du modèle et imputer du pipeline
 model = pipe.named_steps["model"]
 imputer = pipe.named_steps["imputer"]
 
-# Suppression des colonnes non explicatives et sensible (CODE_GENDER)
+# Suppression des colonnes non explicatives
 # features utilisées par le modèle
 feats = [
     f for f in data.columns
@@ -52,9 +55,13 @@ data["MODEL_PREDICTION"] = population_prediction
 
 # définition de shap
 explainer = shap.TreeExplainer(model)
-shap_values_global = explainer(X_data_transformed)
-global_importances = np.abs(shap_values_global.values).mean(axis=0).tolist()
-feature_names = [str(col) for col in feats]
+
+feature_names = global_importance_data["feature_names"]
+global_importances = global_importance_data["importance_values"]
+
+#shap_values_global = explainer(X_data_transformed)
+#global_importances = np.abs(shap_values_global.values).mean(axis=0).tolist()
+#feature_names = [str(col) for col in feats]
 
 
 class ClientRequest(BaseModel):
