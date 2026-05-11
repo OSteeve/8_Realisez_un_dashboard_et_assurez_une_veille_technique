@@ -57,7 +57,7 @@ data["MODEL_PREDICTION"] = population_prediction
 explainer = shap.TreeExplainer(model)
 
 feature_names = global_importance_data["feature_names"]
-global_importances = global_importance_data["importance_values"]
+global_importances = global_importance_data["shap_values"]
 
 #shap_values_global = explainer(X_data_transformed)
 #global_importances = np.abs(shap_values_global.values).mean(axis=0).tolist()
@@ -139,7 +139,7 @@ def new_predict(request: ModifyFeatureRequest) :
 def get_global_importance():
     return {
         "feature_names": list(feature_names),
-        "importance_values": list(global_importances)
+        "shap_values": list(global_importances)
     }
 
 # ENDPOINT IMPORTANCE LOCALE

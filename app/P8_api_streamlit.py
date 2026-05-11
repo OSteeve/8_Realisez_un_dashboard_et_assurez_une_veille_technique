@@ -168,7 +168,7 @@ if analysis_type != "- Choix de l'analyse -":
     # Importance globale
     global_df = pd.DataFrame({
         "feature": response_global["feature_names"],
-        "global_importance": response_global["importance_values"]
+        "global_importance": response_global["shap_values"]
     })
 
     # Top 30 global
