@@ -50,7 +50,7 @@ with col3:
 #########################################################################################
 # Prédiction
 #########################################################################################
-def gauge (proba, threshold, prediction, title="Score client" ) :
+def gauge (proba, threshold, prediction, title="Score client",subheader_title="Décision" ) :
     
     st.caption(f"Seuil de décision : {threshold:.3f}")
     # Jauge
@@ -78,7 +78,7 @@ def gauge (proba, threshold, prediction, title="Score client" ) :
     st.plotly_chart(fig)
 
     # Décision
-    st.subheader("Décision")
+    st.subheader(subheader_title)
     if prediction == 1:
         st.error("## REFUS")
     else:
@@ -92,12 +92,10 @@ gauge(proba=proba,
 #########################################################################################
 # FEATURE IMPORTANCE LOCALE
 #########################################################################################
-
+st.subheader("")
+st.subheader("Influence des variables :")
 
 def local_importance () :
-
-    proba = result["proba"]
-    threshold = result["threshold"]
 
     # shap, envoi de la requête
     response_shap = requests.post(
@@ -109,15 +107,27 @@ def local_importance () :
     shap_result = response_shap.json()
 
 
-    st.subheader("Influence des variables")
+    st.subheader("Influence des variables :")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.badge("Diminue le *risque* → ACCORD", color="blue")
-
+        # st.badge("**ACCORD <<<<<<**", color="blue")
+        st.markdown(
+                "<div style='background-color:#2986cc; text-align:center; color:white; font-size:16px; font-weight:500;'>"
+                "ACCORD  <<<<<<"
+                "</div>",
+                unsafe_allow_html=True
+                )
     with col2:
-        st.badge("Augmente le *risque* → REFUS", color="red")
+        # st.badge("**>>>>>>  REFUS**", color="red")
+        #st.error("**>>>>>>  REFUS**")
+        st.markdown(
+                "<div style='background-color:#ff1962; text-align:center; color:white; font-size:16px; font-weight:500;'>"
+                ">>>>>>  REFUS"
+                "</div>",
+                unsafe_allow_html=True
+                )
 
     # Créeation de l'objet SHAP
     explanation = shap.Explanation(
@@ -132,17 +142,18 @@ def local_importance () :
     shap.plots.waterfall(explanation, max_display=20, show=False)
     st.pyplot(fig)
 
-if st.button("Influence des variables client"):  
+if st.button("Visualisation"):  
     local_importance ()
 
 #########################################################################################
 # ANALYSE DES VARIABLES
 #########################################################################################
-st.subheader("Analyse des variables")
+st.subheader("")
+st.subheader("Analyse des variables :")
 
 analysis_type = st.selectbox(
     "",
-    ["- Choix de l'analyse -","Contribution des variables au score", "Valeur de la variable"]
+    ["- Choix de l'analyse -","Client vs population", "Valeur de la variable"]
     )
 
 
@@ -208,11 +219,12 @@ if analysis_type != "- Choix de l'analyse -":
 
 
 # 2. IMPORTANCE LOCAL VS GLOBAL
-if analysis_type == "Contribution des variables au score":
+if analysis_type == "Client vs population":
 
     col1, col2 = st.columns(2)
     with col1:
         #st.subheader("Importance locale")
+        
         fig_local = go.Figure()
         fig_local.add_trace(go.Bar(
             x=compare_df["abs_shap"],
@@ -231,6 +243,9 @@ if analysis_type == "Contribution des variables au score":
             "xanchor": "center"}
         )
         st.plotly_chart(fig_local, use_container_width=True)
+
+
+
 
     with col2:
         #st.subheader("Importance globale")
@@ -348,7 +363,8 @@ if analysis_type == "Valeur de la variable":
         gauge(proba=new_proba,
               threshold=threshold,
               prediction=modified_result["prediction"],
-              title=f"Score après simulation par modification de :{selected_feature}")
+              title=f"Score après modification de : {selected_feature}",
+              subheader_title="Décision simulée")
 
 
         col1, col2 = st.columns(2)
@@ -362,15 +378,16 @@ if analysis_type == "Valeur de la variable":
             st.metric(
                 "Nouvelle probabilité",
                 f"{new_proba:.3f}",
-                delta=f"{new_proba - proba:.3f}"
+                delta=f"{new_proba - proba:.3f}",
+                delta_color="inverse"
                 )
             st.metric("Nouvel écart au seuil",
                     f"{new_proba - threshold:.3f}"
                     )
 
-        if modified_result["prediction"] == 1:
-            st.error("Décision simulée : REFUS")
-        else:
-            st.success("Décision simulée : ACCORD")
+        #if modified_result["prediction"] == 1:
+            #st.error("Décision simulée : REFUS")
+        #else:
+            #st.success("Décision simulée : ACCORD")
 
 
