@@ -19,5 +19,3 @@ COPY . /app
 
 EXPOSE 8000
 EXPOSE 8501
-
-CMD sh -c "uvicorn api_fastapi:app --host 0.0.0.0 --port 8000 & streamlit run api_streamlit.py --server.address 0.0.0.0 --server.port 8501"
